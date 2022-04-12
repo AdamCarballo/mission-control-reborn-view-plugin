@@ -79,7 +79,7 @@ public class MissionControlView extends View {
 
     protected Object readResolve() {
         if (getBuildsLimit == 0)
-            getBuildsLimit = 250;
+            getBuildsLimit = 999;
 
         if (fontSize == 0)
             fontSize = 16;
