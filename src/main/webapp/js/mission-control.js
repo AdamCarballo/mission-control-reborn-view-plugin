@@ -72,8 +72,8 @@ function reload_jenkins_node_statuses(id, jenkinsUrl, nodeStatuses, buttonClass)
 
     $.each( data.computer, function( key, val ) {
       classes = !val.offline ? 'btn-success' : 'btn-danger';
-      if (val.displayName == "master")
-        nodeLinkName = '(master)';
+      if (val.displayName == "Built-In Node")
+        nodeLinkName = '(built-in)';
       else
         nodeLinkName = val.displayName;
       newDiv = '<a href="' + jenkinsUrl + '/computer/' + encodeURIComponent(nodeLinkName) + '/"><button class="btn ' + buttonClass + ' ' + classes + ' col-lg-6">' + sanitizeHTML(val.displayName) + ' &#47; ' + val.numExecutors + '</button></a>';
