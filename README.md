@@ -6,3 +6,6 @@ Optimized for 1920x1080 (full screen mode).
 ### Screenshot
 
 ![Fullscreen](/screenshots/Fullscreen.png)
+
+### Information
+Includes a fix for [CVE-2019-16563](https://www.jenkins.io/security/advisory/2019-12-17/#SECURITY-1592)
