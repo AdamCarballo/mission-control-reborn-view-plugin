@@ -64,10 +64,12 @@ function reload_jenkins_build_queue(tableSelector, jenkinsUrl, buildQueueSize) {
   });
 }
 
-function reload_jenkins_node_statuses(divSelector, jenkinsUrl, nodeStatuses, buttonClass) {
+function reload_jenkins_node_statuses(id, jenkinsUrl, nodeStatuses, buttonClass) {
   $.getJSON( jenkinsUrl + '/computer/api/json', function( data ) {
-    // Remove all existing rows
-    $(divSelector + ' button').remove();
+		let parent = document.getElementById(id);
+		// Clear all entries
+		parent.replaceChildren();
+
     $.each( data.computer, function( key, val ) {
       classes = !val.offline ? 'btn-success' : 'btn-danger';
       if (val.displayName == "master")
@@ -75,7 +77,7 @@ function reload_jenkins_node_statuses(divSelector, jenkinsUrl, nodeStatuses, but
       else
         nodeLinkName = val.displayName;
       newDiv = '<a href="' + jenkinsUrl + '/computer/' + encodeURIComponent(nodeLinkName) + '/"><button class="btn ' + buttonClass + ' ' + classes + ' col-lg-6">' + sanitizeHTML(val.displayName) + ' &#47; ' + val.numExecutors + '</button></a>';
-      $(divSelector).append(newDiv);
+      $(`#${id}`).append(newDiv);
     });
   });
 }

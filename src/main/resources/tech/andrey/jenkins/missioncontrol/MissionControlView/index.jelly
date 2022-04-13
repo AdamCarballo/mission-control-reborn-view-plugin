@@ -82,7 +82,7 @@
                     reload_jenkins_build_history('#jenkinsBuildHistory', jenkinsUrl + '/${it.url}', buildHistorySize);
                     reload_jenkins_job_statuses('jenkinsJobStatuses', jenkinsUrl + '/${it.url}', buttonClass);
                     reload_jenkins_build_queue('#jenkinsBuildQueue', jenkinsUrl, buildQueueSize);
-                    reload_jenkins_node_statuses('#jenkinsNodeStatuses', jenkinsUrl, nodeStatuses, buttonClass);
+                    reload_jenkins_node_statuses('jenkinsNodeStatuses', jenkinsUrl, nodeStatuses, buttonClass);
 
                     setTimeout(function(){ reload_info(interval); }, interval);
                 }
