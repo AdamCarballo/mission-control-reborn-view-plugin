@@ -32,10 +32,22 @@ function format_interval(iv) {
   return ivStr;
 }
 
+/**
+ * Sanitize and encode all HTML in a user-submitted string
+ * https://portswigger.net/web-security/cross-site-scripting/preventing
+ * @param  {String} str  The user-submitted string
+ * @return {String} str  The sanitized string
+ */
+var sanitizeHTML = function (str) {
+	return str.replace(/[^\w. ]/gi, function (c) {
+		return '&#' + c.charCodeAt(0) + ';';
+	});
+};
+
 function reload_jenkins_build_queue(tableSelector, jenkinsUrl, buildQueueSize) {
   $.getJSON( jenkinsUrl + '/queue/api/json', function( data ) {
     // Remove all existing rows
-    $(tableSelector + ' tbody').find('tr').remove(); 
+    $(tableSelector + ' tbody').find('tr').remove();
     i = 0;
     $.each( data.items, function( key, val ) {
       i++;
@@ -46,7 +58,7 @@ function reload_jenkins_build_queue(tableSelector, jenkinsUrl, buildQueueSize) {
       now = new Date();
       waitingFor = now.getTime() - val.inQueueSince;
       taskName = val.task.name.replace(/(,?)\w*=/g, "$1");
-      newRow = '<tr><td class="text-left"><a href="' + val.task.url + '">'+ taskName + '</a></td><td>' + format_date(startDate) + '</td><td>' + format_interval(waitingFor) + '</td></tr>';
+      newRow = '<tr><td class="text-left"><a href="' + val.task.url + '">'+ sanitizeHTML(taskName) + '</a></td><td>' + format_date(startDate) + '</td><td>' + format_interval(waitingFor) + '</td></tr>';
       $(tableSelector + ' tbody').append(newRow);
     });
   });
@@ -62,7 +74,7 @@ function reload_jenkins_node_statuses(divSelector, jenkinsUrl, nodeStatuses, but
         nodeLinkName = '(master)';
       else
         nodeLinkName = val.displayName;
-      newDiv = '<a href="' + jenkinsUrl + '/computer/' + encodeURIComponent(nodeLinkName) + '/"><button class="btn ' + buttonClass + ' ' + classes + ' col-lg-6">' + val.displayName + ' &#47; ' + val.numExecutors + '</button></a>';
+      newDiv = '<a href="' + jenkinsUrl + '/computer/' + encodeURIComponent(nodeLinkName) + '/"><button class="btn ' + buttonClass + ' ' + classes + ' col-lg-6">' + sanitizeHTML(val.displayName) + ' &#47; ' + val.numExecutors + '</button></a>';
       $(divSelector).append(newDiv);
     });
   });
@@ -98,41 +110,55 @@ function reload_jenkins_build_history(tableSelector, viewUrl, buildHistorySize) 
           console.log('Job: ' + val.jobName + ' Result: ' + val.result);
           classes = '';
       }
-        newRow = '<tr class="' + classes + '"><td class="text-left">' + jobName + '</td><td><a href="' + val.buildUrl + '">' + val.number + '</a></td><td>' + format_date(dt) + '</td><td>' + format_interval(val.duration) + '</td></tr>';
+        newRow = '<tr class="' + classes + '"><td class="text-left">' + sanitizeHTML(jobName) + '</td><td><a href="' + val.buildUrl + '">' + val.number + '</a></td><td>' + format_date(dt) + '</td><td>' + format_interval(val.duration) + '</td></tr>';
       $(tableSelector + ' tbody').append(newRow);
     });
   });
 }
 
-function reload_jenkins_job_statuses(divSelector, viewUrl, buttonClass) {
+function reload_jenkins_job_statuses(id, viewUrl, buttonClass) {
   $.getJSON( viewUrl + '/api/json', function( data ) {
-    // Remove all existing divs
-    $(divSelector + ' button').remove();
+		let parent = document.getElementById(id);
+		// Clear all entries
+		parent.replaceChildren();
+
+		let classes = [];
     $.each( data.allJobsStatuses, function( key, val ) {
       switch (val.status) {
         case 'SUCCESS':
-          classes = 'btn-success';
+          classes.push('btn-success');
           break;
         case 'FAILURE':
-          classes = 'btn-danger';
+          classes.push('btn-danger');
           break;
         case 'ABORTED':
         case 'UNSTABLE':
-          classes = 'btn-warning';
+          classes.push('btn-warning');
           break;
         case 'DISABLED':
         case 'NOT_BUILT':
-          classes = 'invert-text-color';
+          classes.push('invert-text-color');
           break;
         case 'BUILDING':
-          classes = 'btn-info invert-text-color';
+          classes.push('btn-info');
+					classes.push('invert-text-color');
           break;
         default:
-          console.log('Job: ' + val.jobName + ' Status: ' + val.status);
-          classes = 'btn-primary';
+					console.warn(`Unknown job status | Job: ${val.jobName} Status: ${val.status}`);
+          classes.push('btn-primary');
       }
-      newDiv = '<button onclick="location.href=\'' + val.jobUrl + '\'" class="btn ' + buttonClass + ' ' + classes + ' col-lg-6">' + val.jobName + '</button>';
-      $(divSelector).append(newDiv);
+
+			let btn = document.createElement("button");
+			btn.classList.add('btn');
+			if (buttonClass) {
+				btn.classList.add(buttonClass);
+			}
+			btn.classList.add(classes);
+			btn.classList.add('col-lg-6');
+			btn.onclick = function(){ location.href = val.jobUrl; };
+			btn.innerHTML = sanitizeHTML(val.jobName);
+
+      document.getElementById(id).appendChild(btn);
     });
   });
 }
