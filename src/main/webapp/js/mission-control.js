@@ -39,7 +39,7 @@ function format_interval(iv) {
  * @return {String} str  The sanitized string
  */
 var sanitizeHTML = function (str) {
-	return str.replace(/[^\w. ]/gi, function (c) {
+	return str.replace(/[^\w.\p{Emoji} ]/giu, function (c) {
 		return '&#' + c.charCodeAt(0) + ';';
 	});
 };
