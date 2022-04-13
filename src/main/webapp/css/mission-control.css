@@ -40,6 +40,10 @@ th, td {
   background-color: #d38312;
 }
 
+.btn-aborted, .table>tbody>tr.aborted>td {
+  background-color: #bdbdbd;
+}
+
 .container-fluid, .col-lg-4, .col-lg-12 {
   padding-right: 2px;
   padding-left: 2px;

@@ -102,6 +102,8 @@ function reload_jenkins_build_history(tableSelector, viewUrl, buildHistorySize) 
           classes = 'danger';
           break;
         case 'ABORTED':
+					classes = 'aborted invert-text-color';
+					break;
         case 'UNSTABLE':
           classes = 'warning';
           break;
@@ -134,6 +136,9 @@ function reload_jenkins_job_statuses(id, viewUrl, buttonClass) {
           classes.push('btn-danger');
           break;
         case 'ABORTED':
+					classes.push('btn-aborted');
+					classes.push('invert-text-color');
+					break;
         case 'UNSTABLE':
           classes.push('btn-warning');
           break;
