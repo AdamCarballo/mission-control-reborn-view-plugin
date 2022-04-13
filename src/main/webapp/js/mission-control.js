@@ -155,7 +155,7 @@ function reload_jenkins_job_statuses(id, viewUrl, buttonClass) {
 			if (buttonClass) {
 				btn.classList.add(buttonClass);
 			}
-			btn.classList.add(classes);
+			btn.classList.add(...classes);
 			btn.classList.add('col-lg-6');
 			btn.onclick = function(){ location.href = val.jobUrl; };
 			btn.innerHTML = sanitizeHTML(val.jobName);
