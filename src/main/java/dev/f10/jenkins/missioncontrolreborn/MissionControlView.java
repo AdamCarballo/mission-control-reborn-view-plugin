@@ -1,4 +1,4 @@
-package tech.andrey.jenkins.missioncontrol;
+package dev.f10.jenkins.missioncontrolreborn;
 
 import hudson.Extension;
 import hudson.model.*;

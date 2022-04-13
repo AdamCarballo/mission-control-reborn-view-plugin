@@ -2,8 +2,8 @@
     <Match>
         <Bug pattern="URF_UNREAD_PUBLIC_OR_PROTECTED_FIELD" />
         <Or>
-            <Class name="tech.andrey.jenkins.missioncontrol.MissionControlView$Build" />
-            <Class name="tech.andrey.jenkins.missioncontrol.MissionControlView$JobStatus" />
+            <Class name="dev.f10.jenkins.missioncontrolreborn.MissionControlView$Build" />
+            <Class name="dev.f10.jenkins.missioncontrolreborn.MissionControlView$JobStatus" />
         </Or>
     </Match>
 </FindBugsFilter>
