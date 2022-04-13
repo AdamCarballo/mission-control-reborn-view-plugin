@@ -11,11 +11,11 @@ th, td {
 }
 
 .right-border {
-  border-right: 1px dashed #4d004c;
+  border-right: 1px dashed #4e5d6c;
 }
 
 .bottom-border {
-  border-bottom: 1px dashed #4d004c;
+  border-bottom: 1px dashed #4e5d6c;
   overflow-y: hidden;
 }
 
