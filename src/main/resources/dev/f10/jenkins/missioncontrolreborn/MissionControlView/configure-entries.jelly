@@ -13,6 +13,9 @@
                 <f:textbox name="filterJobStatuses" field="filterJobStatuses" />
             </f:entry>
         </f:optionalBlock>
+        <f:entry title="${%Limit of builds to query}">
+            <f:number name="buildsQueryLimit" value="${it.buildsQueryLimit}" />
+        </f:entry>
     </f:section>
     <f:section title="${%UI Settings}">
         <f:entry title="${%Font size}">

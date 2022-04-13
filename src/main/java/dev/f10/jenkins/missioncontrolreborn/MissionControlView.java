@@ -31,7 +31,7 @@ import java.util.regex.PatternSyntaxException;
 @SuppressWarnings("unused")
 @ExportedBean
 public class MissionControlView extends View {
-    private transient int getBuildsLimit;
+    private int buildsQueryLimit;
 
     private int fontSize;
 
@@ -62,6 +62,7 @@ public class MissionControlView extends View {
     @DataBoundConstructor
     public MissionControlView(String name) {
         super(name);
+        this.buildsQueryLimit = 250;
         this.fontSize = 16;
         this.buildQueueSize = 10;
         this.buildHistorySize = 16;
@@ -78,8 +79,8 @@ public class MissionControlView extends View {
     }
 
     protected Object readResolve() {
-        if (getBuildsLimit == 0)
-            getBuildsLimit = 999;
+        if (buildsQueryLimit == 0)
+            buildsQueryLimit = 250;
 
         if (fontSize == 0)
             fontSize = 16;
@@ -102,6 +103,10 @@ public class MissionControlView extends View {
     @Override
     public Collection<TopLevelItem> getItems() {
         return new ArrayList<TopLevelItem>();
+    }
+
+    public int getBuildsQueryLimit() {
+        return buildsQueryLimit;
     }
 
     public int getFontSize() {
@@ -219,6 +224,7 @@ public class MissionControlView extends View {
     @Override
     protected void submit(StaplerRequest req) throws ServletException, IOException {
         JSONObject json = req.getSubmittedForm();
+        this.buildsQueryLimit = json.getInt("buildsQueryLimit");
         this.fontSize = json.getInt("fontSize");
         this.buildHistorySize = json.getInt("buildHistorySize");
         this.buildQueueSize = json.getInt("buildQueueSize");
@@ -291,7 +297,7 @@ public class MissionControlView extends View {
             return l;
 
         List<Job> jobs = instance.getAllItems(Job.class);
-        RunList builds = new RunList(jobs).limit(getBuildsLimit);
+        RunList builds = new RunList(jobs).limit(buildsQueryLimit);
         Pattern r = filterBuildHistory != null ? Pattern.compile(filterBuildHistory) : null;
 
         for (Object b : builds) {
