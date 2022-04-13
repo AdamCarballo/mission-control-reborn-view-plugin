@@ -312,7 +312,7 @@ public class MissionControlView extends View {
                     build.getFullDisplayName(),
                     build.getNumber(),
                     build.getStartTimeInMillis(),
-                    build.getDuration(),
+                    result == null ? System.currentTimeMillis() - build.getStartTimeInMillis() : build.getDuration(),
                     result == null ? "BUILDING" : result.toString(),
                     buildUrl));
         }
