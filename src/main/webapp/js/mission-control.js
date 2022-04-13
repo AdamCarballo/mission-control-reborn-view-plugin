@@ -126,8 +126,8 @@ function reload_jenkins_job_statuses(id, viewUrl, buttonClass) {
 		// Clear all entries
 		parent.replaceChildren();
 
-		let classes = [];
     $.each( data.allJobsStatuses, function( key, val ) {
+			let classes = [];
       switch (val.status) {
         case 'SUCCESS':
           classes.push('btn-success');
